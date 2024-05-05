@@ -1,0 +1,103 @@
+6 auth node js
+server.js 
+
+
+// Import required modules
+const express = require('express');
+const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
+
+const app = express();
+const port = process.env.PORT || 3000;
+const secretKey = 'your_secret_key'; // Replace with a strong secret key
+
+// Middleware setup
+app.use(bodyParser.json());
+
+// Temporary user data
+let users = [
+  { id: 1, username: 'user1', password: 'password1' },
+  { id: 2, username: 'user2', password: 'password2' }
+];
+
+// User Registration
+app.post('/register', (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password) {
+    return res.status(400).json({ message: 'Username and password are required' });
+  }
+  const newUser = { id: users.length + 1, username, password };
+  users.push(newUser);
+  res.status(201).json({ message: 'User registered successfully' });
+});
+
+// User Login
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  const user = users.find(u => u.username === username && u.password === password);
+  if (!user) {
+    return res.status(401).json({ message: 'Invalid credentials' });
+  }
+  const token = jwt.sign({ id: user.id, username: user.username }, secretKey);
+  res.json({ token });
+});
+
+// Protected Route
+app.get('/protected', authenticateToken, (req, res) => {
+  res.json({ message: 'Protected route accessed successfully' });
+});
+
+// Middleware to authenticate JWT token
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+  jwt.verify(token, secretKey, (err, user) => {
+    if (err) {
+      return res.status(403).json({ message: 'Token is not valid' });
+    }
+    req.user = user;
+    next();
+  });
+}
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

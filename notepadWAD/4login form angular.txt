@@ -1,0 +1,80 @@
+login form angular
+
+html
+
+<h2>Login</h2>
+<form (ngSubmit)="onSubmit()">
+  <div class="form-group">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" [(ngModel)]="userData.username" required>
+  </div>
+  <div class="form-group">
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" [(ngModel)]="userData.password" required>
+  </div>
+  <button type="submit">Login</button>
+</form>
+
+
+
+.ts
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
+})
+export class LoginComponent {
+  userData = {
+    username: '',
+    password: ''
+  };
+
+  onSubmit() {
+    // Here you can handle form submission logic, e.g., sending data to a backend API
+    console.log('Form submitted with data:', this.userData);
+    // You can also add code to navigate to another page upon successful login
+  }
+}
+
+
+
+module.ts
+
+
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms'; // Import FormsModule
+
+@Component({
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
+})
+export class LoginComponent {
+  userData = {
+    username: '',
+    password: ''
+  };
+
+  onSubmit() {
+   
+    console.log('Form submitted with data:', this.userData);
+   
+    alert('Form submitted successfully!');
+
+  }
+}
+
+
+
+
+Open src/app/app.component.html and add the login component:
+
+html
+Copy code
+<div style="text-align:center">
+  <h1>Welcome to Login Page</h1>
+</div>
+<app-login></app-login>
